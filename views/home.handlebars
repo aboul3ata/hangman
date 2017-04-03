@@ -1,0 +1,147 @@
+<div id="all">
+
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Cedarville+Cursive" rel="stylesheet">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    </head>
+    <style>
+        #hangmanword {
+            display: none;
+        }
+        .thetitle{
+          font-family: 'Cedarville Cursive', cursive;
+          color: #0089B2;
+        }
+        .thegame{
+          margin-top: 10%;
+        }
+
+        .description{
+          font-size: 20px;
+          margin-bottom: 5%;
+        }
+        #scoreboard{
+          font-size:36px;
+          color:#0089B2;
+          font-weight:bold;
+          position: fixed;
+          bottom: 120px;
+          left:20px;
+        }
+        #triesleft{
+          font-size:36px;
+          color:#0089B2;
+          font-weight:bold;
+          position: fixed;
+          bottom: 120px;
+          right:100px;
+        }
+    </style>
+<div class="row">
+  <h1 class="col-xs-8 col-xs-offset-2 thetitle"> Welcome to Hangman the Countries Edition</h1>
+</div>
+
+<div class="row">
+  <div class="col-xs-3 col-xs-offset-4 thegame">
+
+
+      {{#each test}}
+          <form id="submitform" action="">
+              <div class="description">
+                {{dis}}
+              </div>
+              <span id="hangmanword">{{word}}</span>
+              <div id='test'> </div>
+
+              <input id='enteredguess' type="text" name="" placeholder="Enter your guesss here">
+              <button type="submit" value="Send" class="btn-info"> Enter Guess</button>
+          </form>
+      {{/each}}
+              <button id="buttonn" name="button"> Give Up</button>
+
+
+  </div>
+</div>
+
+<div class="row">
+  <div id="scoreboard">
+    Score
+  </div>
+
+  <div id="triesleft">
+Trials left
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        var $score = 10
+        var $userguess = $('#enteredguess')
+        var $word = $('#hangmanword').text()
+        var $word2 = $word + "test"
+        var $gameOver=10;
+        var $gameWon=$word.length
+        console.log($gameOver)
+        console.log($word)
+        console.log($word.length)
+        $("#buttonn").click(function() {
+            $('#test').text($word)
+        });
+
+        var $dashed = Array($word.length + 1).join("- ")
+        var $dashedArray=[]
+        for (var i = 0; i < $word.length; i++) {
+          $dashedArray.push("X")
+        }
+
+
+        console.log($dashed)
+        console.log($dashedArray);
+        $('#test').text($dashedArray.join(" "))
+
+
+        console.log($score)
+        // when user enters guess
+        $('#submitform').submit(function(e) {
+            $userguess = $('#enteredguess').val()
+            e.preventDefault();
+            console.log($userguess)
+            $counter=0;
+            for (var i = 0, len = $word.length; i < len; i++) {
+                if ($userguess.length != 1) {
+                    alert("Must enter only one letter!!");
+                    break;
+                } else if($word[i] == $userguess) {
+                    $dashedArray[i]=$userguess
+                    $score=$score+10;
+                    console.log($score);
+                    $counter=$counter+1
+                    $gameWon=$gameWon-1
+                } // end of else if
+            } // end of for loop
+            if ($counter==0) {
+              $score=$score-3
+              $gameOver=$gameOver-1
+            } // end of if
+          $('#test').text($dashedArray.join(" "))
+          //losing condition is 10 tries
+          if ($gameOver<1) {
+            alert("You lost :( your score is " + $score );
+          }
+          // wining condition
+          if ($gameWon<1) {
+            alert("You Won!! your score is " + $score );
+          }// end of if
+          $('#scoreboard').text("Score: " +$score)
+          $('#triesleft').text("Trials left: " +$gameOver)
+        }) //end of function
+
+    }); //end of ready function
+</script>
